@@ -1,0 +1,25 @@
+version: "3.0"
+services:
+  web:
+    container_name: web_php
+    build: .
+    ports: 
+      - "80:80"
+    volumes: 
+      - ./app:/var/www/html
+    links: 
+      - db
+  db:
+    container_name: db
+    image: mariadb
+    ports: 
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=r00t
+      - MYSQL_DATABASE=db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=123456
+    volumes: 
+      - ./database.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --lower_case_table_names=1 --character-set-server=utf8 --collation-server=utf8_general_ci
+    #   - ./database:/var/lib/mysql
